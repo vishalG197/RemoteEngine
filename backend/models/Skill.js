@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const skillSchema = new Schema({
-  name: { type: String, unique: true, required: true },
-  users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  professionalExperiences: [{ type: Schema.Types.ObjectId, ref: 'User.professionalExperience' }],
-  // Additional properties if needed
+const skillSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
 });
 
 const Skill = mongoose.model('Skill', skillSchema);

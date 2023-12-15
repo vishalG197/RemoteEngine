@@ -4,7 +4,9 @@ const express = require("express");
 const connection = require("./db");
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
-const onboardingRoutes = require('./routes/onboardingRoutes');
+const developerRoutes = require('./routes/developerRoutes');
+const skillRoutes = require('./routes/skillRoutes');
+
 require('dotenv').config();
 
 
@@ -13,13 +15,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 // Routes
-app.use('/api', authRoutes);
-app.use('/api', onboardingRoutes);
+app.use('/auth', authRoutes);
+app.use('/developers', developerRoutes);
+app.use('/skills', skillRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+   console.error(err.stack);
+   res.status(500).send('Something went wrong!');
+ });
+ 
 app.get("/",(req,res)=>{
   console.log("server is running")
   res.send("server is running")
 })
-app.listen(8080, async () => {
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, async () => {
   try {
     await connection;
     console.log("Connected to the database");
