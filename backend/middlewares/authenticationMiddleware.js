@@ -1,23 +1,23 @@
 // authenticationMiddleware.js
 
 const jwt = require('jsonwebtoken');
-const { secretKey } = require('../config'); // You may have a separate config file for secret keys
-
+require("dotenv").config();
 const authenticationMiddleware = (req, res, next) => {
   // Get the token from the request headers
   const token = req.header('Authorization');
 
   // Check if the token is present
   if (!token) {
+   
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
   }
 
   try {
     // Verify the token using the secret key
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach the user information to the request object
-    req.user = decoded.user;
+    req.userId = decoded.userId;
 
     // Proceed to the next middleware or route handler
     next();

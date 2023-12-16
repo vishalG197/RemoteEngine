@@ -2,9 +2,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User'); // Assuming you have a User model
-
+require("dotenv").config();
 const saltRounds = 10;
-const jwtSecret = 'your-secret-key'; // Replace with a secure secret key
+
 
 const signup = async (req, res) => {
   try {
@@ -27,6 +27,7 @@ const signup = async (req, res) => {
 
     // Create a new user
     const newUser = new User({
+      ...req.body,
       email,
       password: hashedPassword,
     });
@@ -35,7 +36,7 @@ const signup = async (req, res) => {
     await newUser.save();
 
     // Create and return a JWT token
-    const token = jwt.sign({ userId: newUser._id }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(201).json({ token, userId: newUser._id });
   } catch (error) {
@@ -67,7 +68,7 @@ const login = async (req, res) => {
     }
 
     // Create and return a JWT token
-    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.status(200).json({ token, userId: user._id });
   } catch (error) {
@@ -75,8 +76,34 @@ const login = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+const getProfile = async (req, res) => {
+  try {
+    // Get user ID from the request object (assuming it's set during authentication middleware)
+    const userId = req.userId;
+
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // You can customize the data you want to send in the profile response
+    const userProfile = {
+      userId: user._id,
+      email: user.email,
+      firstName:user.firstName
+    };
+
+    res.status(200).json(userProfile);
+  } catch (error) {
+    console.error('Error getting user profile:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   signup,
   login,
+  getProfile
 };

@@ -26,15 +26,30 @@ app.use((err, req, res, next) => {
  });
  
 app.get("/",(req,res)=>{
-  console.log("server is running")
-  res.send("server is running")
+  console.log("Server is running");
+  // Include HTML code in the response
+  const htmlResponse = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Remote Engine</title>
+    </head>
+    <body>
+      <h1>Welcome to Developer Onboarding App!</h1>
+      <p>Elevate Your Code, Empower Your Skills: Developer Lift – Where Innovation Meets Expertise!</p>
+    </body>
+    </html>
+  `;
+  res.send(htmlResponse);
 })
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, async () => {
   try {
     await connection;
     console.log("Connected to the database");
-    console.log("Server is running on port http://localhost:8000");
+    console.log("Server is running on port http://localhost:3001");
   } catch (error) {
     console.error(error);
   }
