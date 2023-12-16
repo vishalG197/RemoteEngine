@@ -1,6 +1,6 @@
 // frontend/src/services/developer.js
 
-import api from './api';
+import {api} from './api';
 
 const developerService = {
   // Submit developer onboarding details

@@ -1,15 +1,16 @@
 // Login.js
 
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { login } from '../services/auth';
+import { useNavigation } from 'react-router-dom';
+import  login  from '../../services/auth';
 
 const Login = () => {
-  const history = useHistory();
+  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-
+  const history = useNavigation()
+  console.log(history);
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -21,7 +22,7 @@ const Login = () => {
       console.log('Login successful!', response);
 
       // Redirect to the desired page (e.g., dashboard)
-      history.push('/dashboard');
+      // history.push('/dashboard');
     } catch (error) {
       // Handle login error
       console.error('Login error:', error);

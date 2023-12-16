@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'; // Assuming you use Redux for state management
-import { logoutAction } from '../redux/auth'; // Replace with your actual logout action
+import { isAuthenticated, removeAuthToken } from '../../utils/authUtils';
+
 
 const Header = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Adjust based on your state structure
-  const dispatch = useDispatch();
+ 
+ 
 
   const handleLogout = () => {
     // Dispatch your logout action to handle the logout process
-    dispatch(logoutAction());
+    removeAuthToken()
   };
 
   return (

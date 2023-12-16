@@ -1,12 +1,12 @@
 // OnboardingForm.js
 
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import {  useNavigation } from 'react-router-dom';
 import ExperienceList from './ExperienceList';
-import { fetchSkills, submitOnboardingData } from '../services/developer'; // Adjust service file paths based on your actual structure
-
+import  fetchSkills from '../../services/developer'; // Adjust service file paths based on your actual structure
+import submitOnboardingData  from '../../services/developer';
 const OnboardingForm = () => {
-  const history = useHistory();
+  const history = useNavigation();
 
   const [formData, setFormData] = useState({
     firstName: '',
