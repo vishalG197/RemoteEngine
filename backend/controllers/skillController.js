@@ -1,6 +1,6 @@
 const Skill = require('../models/Skill');
 
-const getAllSkill = async (req, res) => {
+const getAllSkills = async (req, res) => {
   const { query } = req.params; // Assuming the query parameter is in the URL params
 
   try {
@@ -15,5 +15,5 @@ const getAllSkill = async (req, res) => {
 };
 
 module.exports = {
-  getAllSkill,
+  getAllSkills,
 };

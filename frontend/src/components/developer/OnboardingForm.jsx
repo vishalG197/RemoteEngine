@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
-// Import your custom components
-import SkillComponent from './SkillComponent'; // Make sure to adjust the path based on your project structure
-import ExperienceList from './ExperienceList'; // Adjust the path accordingly
-import EducationalDetails from './EducationalDetails'; // Adjust the path accordingly
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faEnvelope, faPhone, faCogs, faBriefcase, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import SkillComponent from './SkillComponent';
+import ExperienceList from './ExperienceList';
+import EducationalDetails from './EducationalDetails';
 
 const OnboardingForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -29,17 +29,49 @@ const OnboardingForm = () => {
     setEducation(newEducation);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission, send data to the backend API
-    // You can use the services/api.js file to make API calls
+
+    try {
+      // Form data to be sent to the backend
+      const formData = {
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+        skills,
+        experience,
+        education,
+      };
+console.log(formData);
+      // Make a POST request to the backend API
+      const response = await fetch('YOUR_BACKEND_API_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Check if the request was successful
+      if (response.ok) {
+        // Redirect to a success page or perform any other actions
+        console.log('Form submitted successfully!');
+      } else {
+        // Handle errors or display error messages
+        console.error('Form submission failed.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
     <Div>
       <h2>Developer Onboarding</h2>
       <form onSubmit={handleSubmit}>
-        <label>
+        <Label>
+          <FontAwesomeIcon icon={faUser} />
           First Name:
           <input
             type="text"
@@ -47,59 +79,86 @@ const OnboardingForm = () => {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
-        </label>
-        <br />
+        </Label>
+        <Label>
+          <FontAwesomeIcon icon={faUser} />
+          Last Name:
+          <input
+            type="text"
+            placeholder="Enter your last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </Label>
+        <Label>
+          <FontAwesomeIcon icon={faPhone} />
+          Phone Number:
+          <input
+            type="tel"
+            placeholder="Enter your phone number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+        </Label>
+        <Label>
+          <FontAwesomeIcon icon={faEnvelope} />
+          Email:
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Label>
 
-        {/* ... Other input fields for last name, phone number, and email ... */}
+        {/* Additional input fields can be added here */}
 
         {/* Skills (using a multi-select library, e.g., react-select) */}
-        <label>
+        <Label>
+          <FontAwesomeIcon icon={faCogs} />
           Skills:
           <SkillComponent selectedSkills={skills} onChange={handleSkillsChange} />
-        </label>
-        <br />
+        </Label>
 
         {/* Professional Experience */}
-        <label>
+        <Label>
+          <FontAwesomeIcon icon={faBriefcase} />
           Professional Experience:
-          <ExperienceList
-            experiences={experience}
-            onChange={handleExperienceChange}
-          />
-        </label>
-        <br />
+          <ExperienceList experiences={experience} onChange={handleExperienceChange} />
+        </Label>
 
         {/* Educational Experience */}
-        <label>
+        <Label>
+          <FontAwesomeIcon icon={faGraduationCap} />
           Educational Experience:
-          <EducationalDetails
-            education={education}
-            onChange={handleEducationChange}
-          />
-        </label>
-        <br />
+          <EducationalDetails education={education} setEducation={setEducation} />
+        </Label>
 
-        <button type="submit">Submit</button>
+        <Button type="submit">
+          <FontAwesomeIcon icon={faCogs} />
+          Submit
+        </Button>
       </form>
     </Div>
   );
 };
 
-export default OnboardingForm;
-
 const Div = styled.div`
   /* Add your CSS styles here */
-  
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
 
-  label {
-    display: block;
-    margin-bottom: 10px;
+const Label = styled.label`
+  display: block;
+  margin-bottom: 10px;
+
+  svg {
+    margin-right: 8px;
   }
 
   input {
@@ -108,14 +167,19 @@ const Div = styled.div`
     margin-bottom: 15px;
     box-sizing: border-box;
   }
+`;
 
-  button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+const Button = styled.button`
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  svg {
+    margin-right: 8px;
   }
 `;
 
+export default OnboardingForm;

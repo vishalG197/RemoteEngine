@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const SkillComponent = ({ setSkill }) => {
   const [inputValue, setInputValue] = useState("");
@@ -84,6 +86,7 @@ const SkillComponent = ({ setSkill }) => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter skill..."
           />
           <ul>
             {/* Display the fetched skills */}
@@ -99,11 +102,15 @@ const SkillComponent = ({ setSkill }) => {
           {selectedSkills?.map((skill) => (
             <span key={skill.id}>
               {skill.name}{" "}
-              <span onClick={() => handleSkillRemove(skill.id)}>X</span>
+              <span onClick={() => handleSkillRemove(skill.id)}>
+                <FontAwesomeIcon icon={faTimes} />
+              </span>
             </span>
           ))}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">
+          <FontAwesomeIcon icon={faPlus} /> Add Skill
+        </button>
       </form>
     </StyledDiv>
   );
@@ -169,6 +176,7 @@ const StyledDiv = styled.div`
         cursor: pointer;
         margin-left: 5px;
         font-weight: bold;
+        color: red; /* Add your preferred color for the remove icon */
       }
     }
   }
@@ -180,6 +188,12 @@ const StyledDiv = styled.div`
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 5px;
+    }
   }
 `;
 

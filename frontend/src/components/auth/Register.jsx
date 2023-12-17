@@ -3,17 +3,16 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import authService from '../../services/auth';
-import styled from 'styled-components'; // Import styled-components
+import styled from 'styled-components';
 
 const Register = () => {
   const history = useLocation();
-  console.log(history);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: '',
     password: '',
-    isDeveloper: true,
+    isDeveloper: true, // Default value for isDeveloper
   });
 
   const handleChange = (e) => {
@@ -84,25 +83,22 @@ const Register = () => {
           required
         />
 
-        {/* Radio buttons for isDeveloper */}
+        {/* Radio button for isDeveloper */}
         <label>
-          Are you a developer?
+          Are you a Developer?
           <input
             type="radio"
             name="isDeveloper"
             value={true}
-            checked={formData.isDeveloper === true}
+            checked={formData.isDeveloper}
             onChange={handleChange}
           />
           Yes
-          
-        </label>
-        <label>
           <input
             type="radio"
             name="isDeveloper"
             value={false}
-            checked={formData.isDeveloper === false}
+            checked={!formData.isDeveloper}
             onChange={handleChange}
           />
           No
@@ -118,9 +114,7 @@ const Register = () => {
 
 export default Register;
 
-// Apply styled CSS using the classname
 const StyledDiv = styled.div`
-  // Add your CSS styles here
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -134,11 +128,11 @@ const StyledDiv = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    
+
     label {
       margin-bottom: 5px;
     }
-    
+
     input {
       width: 100%;
       padding: 8px;
@@ -146,7 +140,12 @@ const StyledDiv = styled.div`
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-   
+
+    /* Styling for radio buttons */
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
     button {
       background-color: #d23ddf;
       color: white;

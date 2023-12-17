@@ -1,8 +1,11 @@
 // Experience.js
 
 import React, { useState } from 'react';
-import SkillComponent from './SkillComponent'; // Import your SkillComponent
-import { v4 as uuidv4 } from 'uuid'; // Use a library like uuid to generate unique IDs
+import SkillComponent from './SkillComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding, faCode, faCogs, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { v4 as uuidv4 } from 'uuid';
+import styled from 'styled-components';
 
 const Experience = ({ setEducation }) => {
   const [experiences, setExperiences] = useState([
@@ -22,11 +25,9 @@ const Experience = ({ setEducation }) => {
   };
 
   const handleSkillChange = (index, selectedSkills) => {
-    // Extract the objectId values from the selected skills and pass them to setEducation
     const skillObjectIds = selectedSkills.map((skill) => skill.value);
     setEducation(index, skillObjectIds);
 
-    // Update the skillsUsed field in the experiences array
     const updatedExperiences = [...experiences];
     updatedExperiences[index].skillsUsed = selectedSkills;
     setExperiences(updatedExperiences);
@@ -45,49 +46,80 @@ const Experience = ({ setEducation }) => {
     <div>
       {experiences.map((experience, index) => (
         <div key={experience.id}>
-          <label>
+          <Label>
+            <FontAwesomeIcon icon={faBuilding} />
             Company:
-            <input
+            <Input
               type="text"
               value={experience.company}
               onChange={(e) => handleInputChange(index, 'company', e.target.value)}
             />
-          </label>
+          </Label>
           <br />
 
-          <label>
+          <Label>
+            <FontAwesomeIcon icon={faCode} />
             Tech Stack:
-            <input
+            <Input
               type="text"
               value={experience.techStack}
               onChange={(e) => handleInputChange(index, 'techStack', e.target.value)}
             />
-          </label>
+          </Label>
           <br />
 
-          <label>
+          <Label>
+            <FontAwesomeIcon icon={faCogs} />
             Skills Used:
             <SkillComponent
               selectedSkills={experience.skillsUsed}
               onChange={(selectedSkills) => handleSkillChange(index, selectedSkills)}
             />
-          </label>
+          </Label>
           <br />
 
           {/* Add other fields (timePeriod, etc.) similarly */}
 
-          <button type="button" onClick={() => handleRemoveExperience(experience.id)}>
-            Remove Experience
-          </button>
+          <Button type="button" onClick={() => handleRemoveExperience(experience.id)}>
+            <FontAwesomeIcon icon={faTrashAlt} />
+            {/* Remove Experience */}
+          </Button>
           <hr />
         </div>
       ))}
 
-      <button type="button" onClick={handleAddExperience}>
+      <Button type="button" onClick={handleAddExperience}>
         Add Experience
-      </button>
+      </Button>
     </div>
   );
 };
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 10px;
+  svg {
+    margin-right: 8px;
+  }
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+`;
+
+const Button = styled.button`
+  background-color: #35dc4e;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  svg {
+    margin-right: 8px;
+  }
+`;
 
 export default Experience;
