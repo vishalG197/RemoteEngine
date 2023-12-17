@@ -1,16 +1,15 @@
 // Login.js
 
 import React, { useState } from 'react';
-import { useNavigation } from 'react-router-dom';
-import  login  from '../../services/auth';
+import { useNavigate } from 'react-router-dom';
+import login from '../../services/auth';
+import styled from 'styled-components'; // Import styled-components
 
 const Login = () => {
-  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const history = useNavigation()
-  console.log(history);
+  const navigate =useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -22,6 +21,7 @@ const Login = () => {
       console.log('Login successful!', response);
 
       // Redirect to the desired page (e.g., dashboard)
+      navigate("/onboarding")
       // history.push('/dashboard');
     } catch (error) {
       // Handle login error
@@ -31,7 +31,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <StyledDiv>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
@@ -59,8 +59,53 @@ const Login = () => {
           <button type="submit">Login</button>
         </div>
       </form>
-    </div>
+    </StyledDiv>
   );
 };
 
 export default Login;
+
+// Apply styled CSS using the classname
+const StyledDiv = styled.div`
+  // Add your CSS styles here
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 400px;
+  marging-left:25%;
+  h2 {
+    color: #333;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      margin-bottom: 10px;
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        width:100%;
+        background-color: #dc3be8;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+  }
+`;

@@ -1,8 +1,12 @@
 const Skill = require('../models/Skill');
 
-const getAllSkills = async (req, res) => {
+const getAllSkill = async (req, res) => {
+  const { query } = req.params; // Assuming the query parameter is in the URL params
+
   try {
-    const skills = await Skill.find();
+    // Use a regular expression to perform a case-insensitive search
+    const skills = await Skill.find({ name: { $regex: new RegExp(query, 'i') } });
+
     res.json(skills);
   } catch (error) {
     console.error(error);
@@ -11,5 +15,5 @@ const getAllSkills = async (req, res) => {
 };
 
 module.exports = {
-  getAllSkills,
+  getAllSkill,
 };

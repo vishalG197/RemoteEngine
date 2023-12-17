@@ -1,17 +1,19 @@
 // Register.js
 
 import React, { useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import authService from '../../services/auth';
-
+import styled from 'styled-components'; // Import styled-components
 
 const Register = () => {
-  const history = useNavigate();
-
+  const history = useLocation();
+  console.log(history);
   const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
     email: '',
     password: '',
-    // Add other registration fields here
+    isDeveloper: true,
   });
 
   const handleChange = (e) => {
@@ -23,7 +25,7 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Call the registration service
       const response = await authService.register(formData);
@@ -43,9 +45,27 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <StyledDiv>
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
+        <label>First Name:</label>
+        <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Last Name:</label>
+        <input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          required
+        />
+
         <label>Email:</label>
         <input
           type="email"
@@ -64,12 +84,76 @@ const Register = () => {
           required
         />
 
+        {/* Radio buttons for isDeveloper */}
+        <label>
+          Are you a developer?
+          <input
+            type="radio"
+            name="isDeveloper"
+            value={true}
+            checked={formData.isDeveloper === true}
+            onChange={handleChange}
+          />
+          Yes
+          
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="isDeveloper"
+            value={false}
+            checked={formData.isDeveloper === false}
+            onChange={handleChange}
+          />
+          No
+        </label>
+
         {/* Add other registration fields here */}
 
         <button type="submit">Register</button>
       </form>
-    </div>
+    </StyledDiv>
   );
 };
 
 export default Register;
+
+// Apply styled CSS using the classname
+const StyledDiv = styled.div`
+  // Add your CSS styles here
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 400px;
+
+  h2 {
+    color: #333;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    
+    label {
+      margin-bottom: 5px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+   
+    button {
+      background-color: #d23ddf;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+`;

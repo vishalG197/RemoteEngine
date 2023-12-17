@@ -1,136 +1,121 @@
-// OnboardingForm.js
+// DeveloperOnboardingPage.js
 
-import React, { useState, useEffect } from 'react';
-import {  useNavigation } from 'react-router-dom';
-import ExperienceList from './ExperienceList';
-import  fetchSkills from '../../services/developer'; // Adjust service file paths based on your actual structure
-import submitOnboardingData  from '../../services/developer';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+
+// Import your custom components
+import SkillComponent from './SkillComponent'; // Make sure to adjust the path based on your project structure
+import ExperienceList from './ExperienceList'; // Adjust the path accordingly
+import EducationalDetails from './EducationalDetails'; // Adjust the path accordingly
+
 const OnboardingForm = () => {
-  const history = useNavigation();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [skills, setSkills] = useState([]);
+  const [experience, setExperience] = useState([]);
+  const [education, setEducation] = useState([]);
 
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    skills: [],
-    experiences: {
-      education: [],
-      professional: [],
-    },
-  });
-
-  const [allSkills, setAllSkills] = useState([]);
-
-  useEffect(() => {
-    // Fetch skills when the component mounts
-    const fetchAllSkills = async () => {
-      try {
-        const skills = await fetchSkills();
-        setAllSkills(skills);
-      } catch (error) {
-        console.error('Error fetching skills:', error);
-      }
-    };
-
-    fetchAllSkills();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  const handleSkillsChange = (selectedSkills) => {
+    setSkills(selectedSkills);
   };
 
-  const handleSkillChange = (selectedSkills) => {
-    setFormData((prevData) => ({ ...prevData, skills: selectedSkills }));
+  const handleExperienceChange = (newExperience) => {
+    setExperience(newExperience);
   };
 
-  const handleExperienceChange = (experiences) => {
-    setFormData((prevData) => ({ ...prevData, experiences }));
+  const handleEducationChange = (newEducation) => {
+    setEducation(newEducation);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      // Assuming you have a service function for submitting onboarding data
-      await submitOnboardingData(formData);
-      history.push('/dashboard'); // Redirect to the dashboard after successful onboarding
-    } catch (error) {
-      console.error('Error submitting onboarding data:', error);
-    }
+    // Handle form submission, send data to the backend API
+    // You can use the services/api.js file to make API calls
   };
 
   return (
-    <div>
+    <Div>
       <h2>Developer Onboarding</h2>
       <form onSubmit={handleSubmit}>
         <label>
           First Name:
           <input
             type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
+            placeholder="Enter your first name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
         </label>
         <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Phone Number:
-          <input
-            type="tel"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <br />
+
+        {/* ... Other input fields for last name, phone number, and email ... */}
+
+        {/* Skills (using a multi-select library, e.g., react-select) */}
         <label>
           Skills:
-          <select
-            multiple
-            name="skills"
-            value={formData.skills}
-            onChange={(e) => handleSkillChange(Array.from(e.target.selectedOptions, (option) => option.value))}
-            required
-          >
-            {allSkills.map((skill) => (
-              <option key={skill._id} value={skill._id}>
-                {skill.name}
-              </option>
-            ))}
-          </select>
+          <SkillComponent selectedSkills={skills} onChange={handleSkillsChange} />
         </label>
         <br />
-        <ExperienceList onChange={handleExperienceChange} />
+
+        {/* Professional Experience */}
+        <label>
+          Professional Experience:
+          <ExperienceList
+            experiences={experience}
+            onChange={handleExperienceChange}
+          />
+        </label>
         <br />
+
+        {/* Educational Experience */}
+        <label>
+          Educational Experience:
+          <EducationalDetails
+            education={education}
+            onChange={handleEducationChange}
+          />
+        </label>
+        <br />
+
         <button type="submit">Submit</button>
       </form>
-    </div>
+    </Div>
   );
 };
 
 export default OnboardingForm;
+
+const Div = styled.div`
+  /* Add your CSS styles here */
+  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+`;
+
