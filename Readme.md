@@ -31,26 +31,36 @@ A Git repository was created for the project.
 Implement a user-friendly web application that allows clients and developers to register, authenticate, and complete the onboarding process. Ensure secure communication, utilize JWT for authentication, and follow best practices for code quality.
 
 ## Features
-
 -User Registration:
+
 Clients and developers can register using their email addresses.
 -Authentication:
+
 Secure all APIs (except sign-up) using JWT for secure communication.
--Developer Onboarding:
+# Developer Onboarding:
 Developers can submit detailed onboarding information, including personal details, skills, professional experiences, and educational experiences.
--Multiple Education and Professional Experiences:
+
+# Multiple Education and Professional Experiences:
 Developers can add multiple education details and professional experiences, associating each with relevant skills.
--Predefined Skill Schema:
+
+# Predefined Skill Schema:
 A predefined skill schema fetches skills from the backend, associating user skills and professional experiences with it.
--References between Skills and Professional Experiences:
+
+# References between Skills and Professional Experiences:
 Establish references between users and predefined skills, ensuring each professional experience includes a reference to the skills used.
 
 ## Technologies Used
+
 -Backend: Node.js
+
 -Frontend: React
+
 -Database: MongoDB (via Mongoose)
+
 -JSON Web Tokens (JWT)
+
 -bcrypt
+
 
 
 ###How to Run
