@@ -7,6 +7,7 @@ import { faUser, faEnvelope, faPhone, faCogs, faBriefcase, faGraduationCap } fro
 import SkillComponent from './SkillComponent';
 import ExperienceList from './ExperienceList';
 import EducationalDetails from './EducationalDetails';
+import { getAuthToken } from '../../utils/authUtils';
 
 const OnboardingForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -45,10 +46,12 @@ const OnboardingForm = () => {
       };
 console.log(formData);
       // Make a POST request to the backend API
-      const response = await fetch('YOUR_BACKEND_API_ENDPOINT', {
+      const token = localStorage.getItem('token');;
+      const response = await fetch('https://remote-engine-ohgy.onrender.com/developers/onboard', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `${token}`,
         },
         body: JSON.stringify(formData),
       });

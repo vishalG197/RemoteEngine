@@ -2,15 +2,15 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api'; // Replace with your backend API base URL
+const API_BASE_URL = 'https://remote-engine-ohgy.onrender.com/auth'; // Replace with your backend API base URL
 
 const setAuthToken = (token) => {
   if (token) {
     // Set the Authorization header for every request if a token is present
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers['Authorization'] = `${token}`;
   } else {
     // Remove the Authorization header if no token is present
-    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers['Authorization'];
   }
 };
 
@@ -23,9 +23,10 @@ const register = async (userData) => {
   }
 };
 
-const login = async (credentials) => {
+const login = async ({email,password}) => {
+  // console.log('login', email, password);
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+    const response = await axios.post(`${API_BASE_URL}/login`, {email,password});
     const { token } = response.data;
     setAuthToken(token);
     return response.data;

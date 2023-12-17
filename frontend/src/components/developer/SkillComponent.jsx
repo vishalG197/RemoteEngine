@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const SkillComponent = ({ setSkill }) => {
   const [inputValue, setInputValue] = useState("");
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  // Function to fetch skills from the API
   const fetchSkills = async (value) => {
     try {
       const response = await fetch(`/skill?search=${value}`);
@@ -19,41 +18,21 @@ const SkillComponent = ({ setSkill }) => {
     }
   };
 
-  // Function to handle skill selection
-  const handleSkillSelect = async (skill) => {
-    try {
-      const response = await fetch(`/getSkillId?name=${skill}`);
-      const data = await response.json();
-
-      if (data && data.skillId) {
-        const skillObject = {
-          name: skill,
-          id: data.skillId,
-        };
-        setSelectedSkills([...selectedSkills, skillObject]);
-        setInputValue(""); // Clear input after selecting a skill
-      } else {
-        console.error("Error fetching skill ID");
-      }
-    } catch (error) {
-      console.error("Error selecting skill:", error);
-    }
+  const handleSkillSelect = (skill) => {
+    setSelectedSkills([...selectedSkills, skill]);
+    setInputValue("");
   };
 
-  // Function to handle skill removal
   const handleSkillRemove = (skillId) => {
     const updatedSkills = selectedSkills.filter((s) => s.id !== skillId);
     setSelectedSkills(updatedSkills);
   };
 
-  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Extract the array of object IDs from selectedSkills
     const skillIds = selectedSkills.map((skill) => skill.id);
 
-    // Perform POST request with skillIds
     try {
       const response = await fetch("/submitSkills", {
         method: "POST",
@@ -63,13 +42,12 @@ const SkillComponent = ({ setSkill }) => {
         body: JSON.stringify({ skillIds }),
       });
       const data = await response.json();
-      setSkill(data); // Update the state with the response data
+      setSkill(data);
     } catch (error) {
       console.error("Error submitting skills:", error);
     }
   };
 
-  // useEffect to fetch skills when inputValue changes
   useEffect(() => {
     if (inputValue.trim() !== "") {
       fetchSkills(inputValue);
@@ -86,73 +64,60 @@ const SkillComponent = ({ setSkill }) => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter skill..."
+            placeholder="Search skills..."
           />
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <ul>
-            {/* Display the fetched skills */}
             {skills?.map((skill) => (
-              <li key={skill} onClick={() => handleSkillSelect(skill)}>
-                {skill}
+              <li key={skill.id} onClick={() => handleSkillSelect(skill)}>
+                {skill.name}
               </li>
             ))}
           </ul>
         </div>
         <div id="selected-skill">
-          {/* Display the selected skills with a remove option */}
           {selectedSkills?.map((skill) => (
             <span key={skill.id}>
               {skill.name}{" "}
-              <span onClick={() => handleSkillRemove(skill.id)}>
-                <FontAwesomeIcon icon={faTimes} />
-              </span>
+              <FontAwesomeIcon
+                icon={faTimes}
+                className="remove-icon"
+                onClick={() => handleSkillRemove(skill.id)}
+              />
             </span>
           ))}
         </div>
         <button type="submit">
-          <FontAwesomeIcon icon={faPlus} /> Add Skill
+          <FontAwesomeIcon icon={faCheck} />
+          Submit
         </button>
       </form>
     </StyledDiv>
   );
 };
 
-// Styled component for the outer div
 const StyledDiv = styled.div`
-  /* Add your CSS styling for the component here */
-  /* Example styles: */
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  max-width: 400px;
+  margin: 0 auto;
 
   form {
     display: flex;
     flex-direction: column;
-  }
-
-  #skillinput {
-    margin-bottom: 10px;
     position: relative;
 
-    input {
-      width: 100%;
-      padding: 8px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: #aaa;
+      cursor: pointer;
     }
 
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-top: 0;
-      border-radius: 0 0 4px 4px;
 
       li {
         padding: 8px;
@@ -166,30 +131,34 @@ const StyledDiv = styled.div`
   }
 
   #selected-skill {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+
     span {
-      margin-right: 5px;
+      margin-right: 10px;
+      margin-bottom: 10px;
       background-color: #e0e0e0;
       padding: 4px;
       border-radius: 4px;
 
-      span {
+      .remove-icon {
         cursor: pointer;
         margin-left: 5px;
         font-weight: bold;
-        color: red; /* Add your preferred color for the remove icon */
+        color: #ff0000;
       }
     }
   }
 
   button {
+    align-self: flex-start;
     padding: 10px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
 
     svg {
       margin-right: 5px;

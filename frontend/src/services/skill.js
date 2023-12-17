@@ -1,11 +1,11 @@
 // src/services/skill.js
 
-const API_BASE_URL = 'http://localhost:3001'; // Update with your actual backend URL
+const API_BASE_URL = 'https://remote-engine-ohgy.onrender.com'; // Update with your actual backend URL
 
 // Function to fetch all skills from the backend
 export const getAllSkills = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/skills`);
+    const response = await fetch(`${API_BASE_URL}/skills`);
     const data = await response.json();
 
     if (!response.ok) {

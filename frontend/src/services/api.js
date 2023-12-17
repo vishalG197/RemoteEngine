@@ -1,6 +1,6 @@
 // api.js
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001'; // Update with your actual backend URL
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://remote-engine-ohgy.onrender.com'; // Update with your actual backend URL
 
 const headers = {
   'Content-Type': 'application/json',
@@ -18,14 +18,14 @@ const handleResponse = async (response) => {
 export const api = {
   // Authentication APIs
   register: (userData) =>
-    fetch(`${BASE_URL}/api/auth/register`, {
+    fetch(`${BASE_URL}/auth/register`, {
       method: 'POST',
       headers,
       body: JSON.stringify(userData),
     }).then(handleResponse),
 
   login: (userData) =>
-    fetch(`${BASE_URL}/api/auth/login`, {
+    fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers,
       body: JSON.stringify(userData),
@@ -33,18 +33,18 @@ export const api = {
 
   // Developer APIs
   submitOnboarding: (onboardingData, token) =>
-    fetch(`${BASE_URL}/api/developer/onboarding`, {
+    fetch(`${BASE_URL}/developers/onboard`, {
       method: 'POST',
       headers: {
         ...headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: `${token}`,
       },
       body: JSON.stringify(onboardingData),
     }).then(handleResponse),
 
   // Skill APIs
   getSkills: () =>
-    fetch(`${BASE_URL}/api/skills`, {
+    fetch(`${BASE_URL}/skills`, {
       method: 'GET',
       headers,
     }).then(handleResponse),

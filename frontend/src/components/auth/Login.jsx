@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import login from '../../services/auth';
+import authService from '../../services/auth';
 import styled from 'styled-components'; // Import styled-components
 
 const Login = () => {
@@ -12,11 +12,12 @@ const Login = () => {
   const navigate =useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
-
+console.log(email, password)
     try {
       // Call the login service function
-      const response = await login({ email, password });
-
+      const response = await authService.login({ email, password });
+      
+     
       // Handle successful login
       console.log('Login successful!', response);
 
