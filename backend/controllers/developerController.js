@@ -18,6 +18,7 @@ const submitOnboarding = async (req, res) => {
 
     // Create a new developer
     const newDeveloper = new Developer({
+      user: req.userId ,
       firstName,
       lastName,
       phoneNumber,
