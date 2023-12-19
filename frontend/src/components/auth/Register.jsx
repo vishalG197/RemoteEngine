@@ -1,5 +1,3 @@
-// Register.js
-
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import authService from '../../services/auth';
@@ -12,8 +10,10 @@ const Register = () => {
     lastName: "",
     email: '',
     password: '',
-    isDeveloper: false, // Default value for isDeveloper
+    isDeveloper: false,
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,27 +26,31 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      // Set loading to true on button click
+      setLoading(true);
+
       // Call the registration service
       const response = await authService.register(formData);
-       console.log(formData)
+
       // Assuming the backend returns a token upon successful registration
-      console.log(response);
-      const { token } = response;
+      const { token, userId } = response;
 
-      // Save the token to localStorage or cookies
+      // Save the token and userId to localStorage
       localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
 
-      // Redirect to the onboarding page (adjust the route based on your app structure)
-      // history.push('/onboarding');
-      if(formData.isDeveloper){
-        navigate("./onboarding")
-      }else{
-        navigate("./dashbaord")
+      // Redirect to the onboarding page or dashboard based on user type
+      if (formData.isDeveloper) {
+        navigate("./onboarding");
+      } else {
+        navigate("./dashboard");
       }
-      // history.state("/")
     } catch (error) {
       // Handle registration error (display error message, etc.)
       console.error('Registration failed', error);
+    } finally {
+      // Set loading back to false after API request completes
+      setLoading(false);
     }
   };
 
@@ -54,7 +58,7 @@ const Register = () => {
     <StyledDiv>
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
-        <label>First Name:</label>
+      <label>First Name:</label>
         <input
           type="text"
           name="firstName"
@@ -111,9 +115,10 @@ const Register = () => {
           No
         </label>
 
-        {/* Add other registration fields here */}
 
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Loading...' : 'Register'}
+        </button>
       </form>
     </StyledDiv>
   );

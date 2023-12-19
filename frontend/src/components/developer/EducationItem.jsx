@@ -18,6 +18,7 @@ const EducationItem = ({ index, education, onChange, onRemove }) => {
           type="text"
           name="degreeName"
           value={education.degreeName}
+          placeholder="Degree Name"
           onChange={handleChange}
         />
       </Label>
@@ -25,11 +26,12 @@ const EducationItem = ({ index, education, onChange, onRemove }) => {
 
       <Label>
         <FontAwesomeIcon icon={faUniversity} />
-        School Name:
+        University Name:
         <Input
           type="text"
           name="schoolName"
           value={education.schoolName}
+          placeholder='University Name'
           onChange={handleChange}
         />
       </Label>

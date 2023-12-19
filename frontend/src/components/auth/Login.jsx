@@ -9,25 +9,35 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate =useNavigate();
+  const [loading, setLoading] = useState(false); // Add loading state
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
-console.log(email, password)
+
     try {
+      // Set loading to true on button click
+      setLoading(true);
+
       // Call the login service function
       const response = await authService.login({ email, password });
-      
-     
+
       // Handle successful login
       console.log('Login successful!', response);
 
       // Redirect to the desired page (e.g., dashboard)
-      navigate("/onboarding")
-      // history.push('/dashboard');
+      navigate("/onboarding");
+
+      // Save the token and userId to localStorage
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('userId', response.userId);
     } catch (error) {
       // Handle login error
       console.error('Login error:', error);
       setError('Invalid email or password. Please try again.');
+    } finally {
+      // Set loading back to false after API request completes
+      setLoading(false);
     }
   };
 
@@ -55,9 +65,12 @@ console.log(email, password)
             required
           />
         </div>
+       <div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
-        <div>
-          <button type="submit">Login</button>
+        
+        <button type="submit" disabled={loading}>
+          {loading ? 'Loading...' : 'Login'}
+        </button>
         </div>
       </form>
     </StyledDiv>

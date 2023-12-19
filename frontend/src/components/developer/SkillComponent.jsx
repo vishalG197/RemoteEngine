@@ -3,16 +3,23 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const SkillComponent = ({ setSkill }) => {
+const SkillComponent = ({ setSkills }) => {
   const [inputValue, setInputValue] = useState("");
-  const [skills, setSkills] = useState([]);
+  const [skill, setSkill] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
   const fetchSkills = async (value) => {
     try {
-      const response = await fetch(`/skill?search=${value}`);
+      const token = localStorage.getItem("token");
+      console.log(token);
+      const response = await fetch(`https://remote-engine-ohgy.onrender.com/skills?query=${value}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       const data = await response.json();
-      setSkills(data.skills);
+      console.log(data)
+      setSkill(data);
     } catch (error) {
       console.error("Error fetching skills:", error);
     }
@@ -30,32 +37,17 @@ const SkillComponent = ({ setSkill }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const skillIds = selectedSkills.map((skill) => skill.id);
-
-    try {
-      const response = await fetch("/submitSkills", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ skillIds }),
-      });
-      const data = await response.json();
-      setSkill(data);
-    } catch (error) {
-      console.error("Error submitting skills:", error);
-    }
+    setSkills(selectedSkills);
   };
 
   useEffect(() => {
     if (inputValue.trim() !== "") {
       fetchSkills(inputValue);
     } else {
-      setSkills([]);
+      setSkill([]);
     }
   }, [inputValue]);
-
+console.log(skill)
   return (
     <StyledDiv>
       <form onSubmit={handleSubmit}>
@@ -68,7 +60,7 @@ const SkillComponent = ({ setSkill }) => {
           />
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <ul>
-            {skills?.map((skill) => (
+            {skill?.map((skill) => (
               <li key={skill.id} onClick={() => handleSkillSelect(skill)}>
                 {skill.name}
               </li>
@@ -165,5 +157,7 @@ const StyledDiv = styled.div`
     }
   }
 `;
+
+
 
 export default SkillComponent;
