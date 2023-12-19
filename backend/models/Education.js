@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const educationSchema = new Schema({
   degreeName: {
     type: String,
@@ -15,8 +16,6 @@ const educationSchema = new Schema({
   },
 });
 
-
 const Education = mongoose.model('Education', educationSchema);
-
 
 module.exports = Education;

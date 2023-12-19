@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const User = require('../models/User'); // Assuming you have a User model
-require("dotenv").config();
-const saltRounds = 10;
+const User = require('../models/User');
+const { generateToken, verifyToken } = require('../utils');
 
+require('dotenv').config();
+const saltRounds = 10;
 
 const signup = async (req, res) => {
   try {
@@ -36,8 +37,7 @@ const signup = async (req, res) => {
     await newUser.save();
 
     // Create and return a JWT token
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    const token = generateToken({ userId: newUser._id });
     res.status(201).json({ token, userId: newUser._id });
   } catch (error) {
     console.error('Error during signup:', error);
@@ -68,14 +68,14 @@ const login = async (req, res) => {
     }
 
     // Create and return a JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    const token = generateToken({ userId: user._id });
     res.status(200).json({ token, userId: user._id });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 const getProfile = async (req, res) => {
   try {
     // Get user ID from the request object (assuming it's set during authentication middleware)
@@ -92,7 +92,7 @@ const getProfile = async (req, res) => {
     const userProfile = {
       userId: user._id,
       email: user.email,
-      firstName:user.firstName
+      firstName: user.firstName,
     };
 
     res.status(200).json(userProfile);
@@ -105,5 +105,5 @@ const getProfile = async (req, res) => {
 module.exports = {
   signup,
   login,
-  getProfile
+  getProfile,
 };

@@ -1,18 +1,16 @@
-// Import required modules
 const mongoose = require('mongoose');
 
-// Define the ProfessionalExperience schema
 const professionalExperienceSchema = new mongoose.Schema({
   company: {
     type: String,
     required: true,
   },
   techStack: {
-    type: [String], // An array of technologies used during the experience
+    type: [String],
     required: true,
   },
   skillsUsed: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Skill' }], // Reference to skills from the predefined skill schema
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Skill' }],
     required: true,
   },
   timePeriod: {
@@ -22,10 +20,15 @@ const professionalExperienceSchema = new mongoose.Schema({
     },
     endDate: {
       type: Date,
+      validate: {
+        validator: function (endDate) {
+          return !this.startDate || !endDate || this.startDate < endDate;
+        },
+        message: 'End date must be after the start date.',
+      },
     },
-  },
+  }
 });
-
 
 const ProfessionalExperience = mongoose.model('ProfessionalExperience', professionalExperienceSchema);
 

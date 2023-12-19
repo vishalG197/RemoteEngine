@@ -6,10 +6,6 @@ const skillSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
 });
 
 const Skill = mongoose.model('Skill', skillSchema);

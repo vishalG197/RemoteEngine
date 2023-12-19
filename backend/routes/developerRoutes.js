@@ -3,45 +3,11 @@ const router = express.Router();
 const authenticationMiddleware = require('../middlewares/authenticationMiddleware');
 const onboardingController = require('../controllers/developerController');
 
-
 /**
  * @swagger
  * tags:
  *   name: Developer
  *   description: Developer onboarding operations
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Developer:
- *       type: object
- *       properties:
- *         firstName:
- *           type: string
- *         lastName:
- *           type: string
- *         email:
- *           type: string
- *         phoneNumber:
- *           type: string
- *         skills:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Skill'
- *         experience:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/ProfessionalExperience'
- *         education:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Education'
- *       required:
- *         - firstName
- *         - lastName
- *         - email
  */
 
 /**
@@ -72,8 +38,6 @@ const onboardingController = require('../controllers/developerController');
  *             example:
  *               message: "Internal server error"
  */
-
-module.exports = router;
 
 // Middleware to protect routes requiring authentication
 router.use(authenticationMiddleware);

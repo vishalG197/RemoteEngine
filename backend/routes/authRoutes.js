@@ -2,35 +2,12 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const authenticationMiddleware = require('../middlewares/authenticationMiddleware');
+
 /**
  * @swagger
  * tags:
  *   name: Authentication
  *   description: User authentication operations
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         firstName:
- *           type: string
- *         lastName:
- *           type: string
- *         email:
- *           type: string
- *         password:
- *           type: string
- *         isDeveloper:
- *           type: boolean
- *       required:
- *         - firstName
- *         - lastName
- *         - email
- *         - password
  */
 
 /**
@@ -69,6 +46,7 @@ const authenticationMiddleware = require('../middlewares/authenticationMiddlewar
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
+ *
  *       content:
  *         application/json:
  *           schema:
@@ -127,11 +105,7 @@ const authenticationMiddleware = require('../middlewares/authenticationMiddlewar
  */
 
 router.post('/register', authController.signup);
-
-
 router.post('/login', authController.login);
-
-
 router.get('/profile', authenticationMiddleware, authController.getProfile);
 
 module.exports = router;

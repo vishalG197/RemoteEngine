@@ -12,22 +12,6 @@ const skillController = require('../controllers/skillController');
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     Skill:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *         description:
- *           type: string
- *       required:
- *         - name
- *         - description
- */
-
-/**
- * @swagger
  * /skills:
  *   get:
  *     summary: Get all skills
