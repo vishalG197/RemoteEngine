@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
-const { generateToken, verifyToken } = require('../utils');
+const { generateToken, verifyToken } = require('../utils/jwtUtils');
 
 require('dotenv').config();
 const saltRounds = 10;
