@@ -4,6 +4,7 @@ const ProfessionalExperience = require('../models/ProfessionalExperience');
 const Education = require('../models/Education');
 
 const submitOnboarding = async (req, res) => {
+  console.log(req.body)
   try {
     const {
       firstName,
