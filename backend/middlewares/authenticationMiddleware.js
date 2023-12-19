@@ -4,7 +4,7 @@ require('dotenv').config();
 const authenticationMiddleware = (req, res, next) => {
   // Get the token from the request headers
   const token = req.header('Authorization');
-
+ console.log(token);
   // Check if the token is present
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
